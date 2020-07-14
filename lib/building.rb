@@ -37,4 +37,14 @@ class Building
     result
   end
 
+  def annual_breakdown
+    result = Hash.new { |hash, key| hash[key] = []}
+    @units.each do |unit|
+      @renters.each do |renter|
+        result[renter.name] << unit.monthly_rent
+      end
+    end
+    result
+  end
+
 end
