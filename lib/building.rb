@@ -26,7 +26,15 @@ class Building
     result = @units.max_by do |unit|
       unit.monthly_rent
     end
-    result.renter 
+    result.renter
+  end
+
+  def units_by_number_of_bedrooms
+    result = Hash.new { |hash, key| hash[key] = []}
+    @units.each do |unit|
+      result[unit.bedrooms] << unit.number
+    end
+    result
   end
 
 end

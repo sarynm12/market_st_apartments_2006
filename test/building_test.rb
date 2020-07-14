@@ -89,9 +89,39 @@ class BuildingTest < Minitest::Test
     building.add_renter(renter1)
     building.add_unit(unit2)
     renter2 = Renter.new("Tim")
-    unit2.add_renter(renter2)
-    building.add_renter(renter2)
+    unit2.add_renter(renter1)
+    building.add_renter(renter1)
     assert_equal renter1, building.renter_with_highest_rent
+    renter2 = Renter.new("Jessie")
+    unit1.add_renter(renter2)
+    assert_equal renter2, building.renter_with_highest_rent
+  end
+
+  def test_it_can_return_units_by_bedroom
+    building = Building.new
+    unit1 = Apartment.new({number: "A1", monthly_rent: 1200, bathrooms: 1, bedrooms: 1})
+    unit2 = Apartment.new({number: "B2", monthly_rent: 999, bathrooms: 2, bedrooms: 2})
+    unit3 = Apartment.new({number: "C3", monthly_rent: 1150, bathrooms: 2, bedrooms: 2})
+    unit4 = Apartment.new({number: "D4", monthly_rent: 1500, bathrooms: 2, bedrooms: 3})
+    building.add_unit(unit1)
+    renter1 = Renter.new("Spencer")
+    unit1.add_renter(renter1)
+    building.add_renter(renter1)
+    building.add_unit(unit2)
+    renter2 = Renter.new("Tim")
+    unit2.add_renter(renter1)
+    building.add_renter(renter1)
+    renter2 = Renter.new("Jessie")
+    unit1.add_renter(renter2)
+    renter3 = Renter.new("Max")
+    unit3.add_renter(renter3)
+    building.add_unit(unit3)
+    building.add_unit(unit4)
+    assert_equal ({
+                  3 => ["D4" ],
+                  2 => ["B2", "C3"],
+                  1 => ["A1"]
+                  }), building.units_by_number_of_bedrooms
   end
 
 end
@@ -102,7 +132,7 @@ end
 # Use TDD to update your Building class so that it responds to the following interaction pattern. Note that the `renter_with_highest_rent` method should ignore units with no renter.
 #
 # ```ruby
-# pry(main)> require './lib/building'
+# require './lib/building'
 # # => true
 #
 # pry(main)> require './lib/renter'
